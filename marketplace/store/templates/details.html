@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block content %}
+{% for pro in product %}
+<h1>{{pro.name}}</h1>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<section class="mb-5">
+
+  <div class="row mx-auto mt-3">
+    <div class="col-md-3 mb-4 mb-md-0">
+
+
+        <div class="row product-gallery mx-1">
+
+          <div class="col-12 mb-0 ">
+            <figure class="view overlay rounded z-depth-1 main-img">
+                <img src= {{pro.image}}
+                  class="img-fluid z-depth-1">
+              
+            </figure>
+            
+          </div>
+
+       
+
+      </div>
+
+    </div>
+    <div class="col-md-9">
+
+      <h5>{{pro.name}}</h5>
+
+      
+      {% if pro.price != pro.sprice %}
+      <p><span class="mr-1"><strong>Actual Price: <del>{{pro.price}}</del></strong></span></p>
+      <p><span class="mr-1"><strong> Sale Price: {{pro.sprice}}</strong></span></p>
+      {% else %}
+      <p><span class="mr-1"><strong>Actual Price: {{pro.price}}</strong></span></p>
+      {% endif %}
+      <p class="pt-1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam, sapiente illo. Sit
+        error voluptas repellat rerum quidem, soluta enim perferendis voluptates laboriosam. Distinctio,
+        officia quis dolore quos sapiente tempore alias.</p>
+      <div class="table-responsive">
+        <table class="table table-sm table-borderless mb-0">
+          <tbody>
+            <tr>
+              <th class="pl-0 w-25" scope="row"><strong>Category</strong></th>
+              <td>{{pro.category}}</td>
+            </tr>
+            <tr>
+              <th class="pl-0 w-25" scope="row"><strong>Stock</strong></th>
+              {% if pro.stock %}
+              <td style="color:green;">Availabe</td>
+              {% else %}
+              <td style="color:red;">Out of stock</td>
+              {% endif %}
+              
+            </tr>
+          </tbody>
+        </table>
+        {% endfor %}
+        {% comment %} <form class="ml-3 mr-3" action="{% url 'contact' %}?prodid={{id}}" method = "POST">
+  {% csrf_token %}
+  <input hidden type="text" name='product' value='{{id}}'> {% endcomment %}
+<button onclick="myFunction()"class="btn btn-primary btn-md mr-1 mb-2 pl-2 mx-auto"><i
+    class="fas fa-shopping-cart pr-2"></i>Contact Owner</button>
+  {% comment %} </form>  {% endcomment %}
+
+  <form class="ml-3 mr-3" action="{% url 'index' %}?prodid={{id}}" method = "POST">
+  {% csrf_token %}
+  <input hidden type="text" name='product' value='{{id}}'>
+<button type="submit" class="btn btn-danger  btn-md mr-1 mb-2 pl-2 mx-auto"><i
+    class="fas fa-shopping-cart pr-2"></i>Back</button>
+  </form> 
+      </div>
+      <hr>
+
+    </div>
+  </div>
+
+</section>
+<script>
+function myFunction() {
+  alert("The owner has been notified");
+}
+</script>
+{% endblock content %}

@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load access_tags %}
+<div class="container">
+<h1>My Products</h1>
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Product Id</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Image</th>
+            <th scope="col">Stock</th>
+            <th scope="col">Actual Price</th>
+            <th scope="col">Sale Price</th>
+            <th scope="col">Intrested Persons</th>
+            <th scope="col">Options</th>
+          </tr>
+        </thead>
+        {% for pro in prod %}
+        <tbody>
+          <tr>
+            
+            <th scope="row">{{pro.productId}}</th>
+            <td>{{pro.name}}</td>
+            <td>{{pro.image}}</td>
+            <td>{{pro.stock}}</td>
+            <td>{{pro.price}}</td>
+            <td>{{pro.sprice}}</td>
+            {% with p_id=pro.productId %} 
+            {% if p_id in visits %}
+            
+            <td>  {{ visits|access:p_id }}  </td>
+            {% else %}
+            <td></td>
+            {% endif %}
+            {% endwith %}
+            <td>
+           {% comment %} <form action="{% url 'edit' %}?prodid={{pro.productId}}" method="POST">
+              {% csrf_token %}
+            <button type="submit" class="btn btn-primary"><i class="far fa-trash-alt">Edit</i></button>
+          </form> {% endcomment %}
+            <form action="{% url 'delete' %}?prodid={{pro.productId}}" method="POST">
+              {% csrf_token %}
+            <button type="submit" class="btn btn-danger"><i class="far fa-trash-alt">Delete</i></button>
+          </form>
+            </td>
+          </tr>
+          
+        </tbody>
+        {% endfor %}
+        
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+    
+    <div class="p-4 m-4">
+
+        
+        <div class="col-lg-5 rounded mx-auto border pt-4">
+            <div class="text-center col">
+            
+                <h1> Add Product </h1>
+            <!-- <hr> -->
+            
+            <hr>
+            </div>
+            
+            <form action="{% url 'dashboard' %}" method="POST">
+                
+                {% csrf_token %}
+
+                {% if error %}
+                <div class="alert alert-danger" role="alert">
+                    {{error}}
+                </div> 
+                 {% endif %} 
+                
+                <div class="form-group">
+                    <label for="">Product Id</label>
+                    <input type="text" name="pid"
+                     id="" value="{{values.first_name}}" class="form-control form-control-sm" 
+                     placeholder="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Category</label>
+                    <select name="category" id="cats">
+                    {% for cat in category %}
+                    <option value={{cat.id}}>{{cat.name}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
+
+               
+                <div class="form-group">
+                    <label for="">Product Name</label>
+                    <input type="text" name="pname" 
+                    id="" value="" class="form-control form-control-sm"
+                    required>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Image Url</label>
+                    <input type="text" name="pimage" 
+                    id="" value="" class="form-control form-control-sm"
+                    required>
+                </div>
+
+                <div class="form-group">
+                    <label for="">Stock</label>
+                    <input type="checkbox" name="stock" 
+                    id="" value=1
+                    >
+                </div>
+               <div class="form-group">
+                    <label for="">Actual Price</label>
+                    <input type="text" name="aprice" 
+                    id="" value="" class="form-control form-control-sm"
+                    required>
+                </div>
+                <div class="form-group">
+                    <label for="">Sale Price</label>
+                    <input type="text" name="sprice" 
+                    id="" value="" class="form-control form-control-sm"
+                    required>
+                </div>
+                <div class="form-group">
+                    {% comment %} <label for="">Uid</label> {% endcomment %}
+                    <input hidden type="text" name="uid" 
+                    id="" value="{{request.session.customer}}" class="form-control form-control-sm"
+                    required>
+                </div>
+
+                <hr>
+                <div class="form-group">
+                    <input class="btn btn-sm btn-info" type="submit" value="Add Product">
+                </div>
+
+                
+            </form>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

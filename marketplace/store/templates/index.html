@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container-fluid mt-3">
+    <div class="row">
+        <!-- filter -->
+        <div class="col-lg-2 mx-auto">
+            <div class="list-group">
+            <h3>Filter</h3>
+            <a href="/" class="list-group-item list-group-item-action">All Products</a>
+            {% for cat in category  %}
+                <a href="/?category={{cat.id}}" class="list-group-item list-group-item-action">{{cat.name}}</a>
+            {% endfor %}
+            </div>
+
+        </div>
+        <!-- products -->
+        <div id = 'products' class="col-lg-10 mx-auto" >
+            <div class="row mx-auto">
+                {% for product in products %}
+                <div class="card mx-auto mb-3" style="width: 18rem;">
+                    <img src={{product.image}} class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">{{product.name}}</h5>
+                      {% if product.price != product.sprice %}
+                      <p class="card-text">Actual price:<del>{{product.price}}</del></p>
+                      <p class="card-text">Sale price:{{product.sprice}}</p>
+                      {% else %}
+                      <p class="card-text">Price:{{product.price}}</p>
+                      {% endif %}
+                      {% if  product.stock == False %}
+                      <p class="card-text" style="color:red;">Out of Stock</p>
+                      {% endif %}
+                      <p class="card-text">Views: {{product.views}}</p>
+                      <a href="{% url 'detail' %}?prodid={{product.productId}}" class="btn btn-primary">Details</a>
+                    </div>
+                  </div>
+                {% endfor %}
+                
+            </div>
+        </div>
+
+
+    </div>
+
+
+</div>
+{% endblock content %}
